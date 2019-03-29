@@ -30,5 +30,5 @@ docker-build: test
 docker: docker-build
 	$(DOCKER) run --name slack-message-redirector -e SLACK_TOKEN=$${SLACK_TOKEN} -e SLACK_CHANNEL_ID=$${SLACK_CHANNEL_ID} -p 8000:8000 -d $(DOCKER_IMAGE)
 
-docker-push:
+docker-push: docker-build
 	$(DOCKER) push $(DOCKER_IMAGE)

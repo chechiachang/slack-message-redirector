@@ -1,4 +1,4 @@
-sendgrid-event-exporter
+sendgrid-event-redirector
 ===
 A api server which redirect http request to slack message.
 
