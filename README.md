@@ -18,6 +18,8 @@ make test
 # Run with Docker
 
 ```
+export SLACK_TOKEN=[slackAppToken or slackPersonalToken]
+export SLACK_CHANNEL=[slackChannelID]
 make docker
 ```
 

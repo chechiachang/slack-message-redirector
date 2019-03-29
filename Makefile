@@ -1,5 +1,14 @@
+SHELL:=/bin/bash
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Linux)
+	DOCKER=sudo docker
+endif
+ifeq ($(UNAME_S),Darwin)
+	DOCKER=docker
+endif
+
 install:
-	go get ..
+	go get ./...
 
 build: install
 	go build .
@@ -7,7 +16,7 @@ build: install
 run: build
 	./slack-message-redirector
 
-test:
+test: install
 	go test ./...
 
 message:
@@ -16,7 +25,10 @@ message:
 DOCKER_IMAGE=chechiachang/slack-message-redirector
 
 docker-build: test
-	docker build -t $(DOCKER_IMAGE):latest -f Dockerfile .
+	$(DOCKER) build -t $(DOCKER_IMAGE):latest -f Dockerfile .
 
 docker: docker-build
-	docker run --name slack-message-redirector -p 8000:8000 -d $(DOCKER_IMAGE)
+	$(DOCKER) run --name slack-message-redirector -e SLACK_TOKEN=$${SLACK_TOKEN} -e SLACK_CHANNEL_ID=$${SLACK_CHANNEL_ID} -p 8000:8000 -d $(DOCKER_IMAGE)
+
+docker-push:
+	$(DOCKER) push $(DOCKER_IMAGE)
