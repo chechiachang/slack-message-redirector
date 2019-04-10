@@ -1,5 +1,6 @@
 # Binaries for programs and plugins
 slack-message-redirector
+kubernetes/*_bak
 *.exe
 *.exe~
 *.dll

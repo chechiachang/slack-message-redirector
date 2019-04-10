@@ -29,9 +29,6 @@ message-remote:
 DOCKER_IMAGE=chechiachang/slack-message-redirector
 GIT_COMMIT_SHA = $(shell git rev-parse --short HEAD)
 
-image-tag:
-	@echo $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)
-
 docker-build: test
 	$(DOCKER) build -t $(DOCKER_IMAGE):$(GIT_COMMIT_SHA) -f Dockerfile .
 
@@ -40,3 +37,14 @@ docker: docker-build
 
 docker-push: docker-build
 	$(DOCKER) push $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)
+
+ifeq ($(UNAME_S),Linux)
+image-tag: docker-push
+	@echo $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)
+	sed -i 's!image: $(DOCKER_IMAGE):.*!image: $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)!g' kubernetes/deployment.yaml
+endif
+ifeq ($(UNAME_S),Darwin)
+image-tag: docker-push
+	@echo $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)
+	sed -i '_bak' -e 's!image: $(DOCKER_IMAGE):.*!image: $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)!g' kubernetes/deployment.yaml
+endif

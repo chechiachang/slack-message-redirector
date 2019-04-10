@@ -1,6 +1,11 @@
 sendgrid-event-redirector
 ===
-A api server which redirect http request to slack message.
+
+A api server which redirect http request to slack message. Use cases:
+- Integration service which has no-slack http webhook
+  - Sendgrid
+
+---
 
 # Run
 
@@ -23,12 +28,8 @@ make message
 export SLACK_TOKEN=[slackAppToken or slackPersonalToken]
 export SLACK_CHANNEL=[slackChannelID]
 make docker
+make docker-push
 ```
-
-# Use cases
-
-Integration service which has no-slack http webhook
-- Sendgrid
 
 ---
 
