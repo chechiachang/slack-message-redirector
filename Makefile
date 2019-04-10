@@ -29,6 +29,9 @@ message-remote:
 DOCKER_IMAGE=chechiachang/slack-message-redirector
 GIT_COMMIT_SHA = $(shell git rev-parse --short HEAD)
 
+image-tag:
+	@echo $(DOCKER_IMAGE):$(GIT_COMMIT_SHA)
+
 docker-build: test
 	$(DOCKER) build -t $(DOCKER_IMAGE):$(GIT_COMMIT_SHA) -f Dockerfile .
 
