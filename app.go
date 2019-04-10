@@ -46,13 +46,15 @@ func (a *App) Run() {
 	log.Println("Running app with config: ", a.Config)
 	router := mux.NewRouter()
 
-	router.HandleFunc("/slack", SendSlackMessage(a)).Methods("POST")
+	router.HandleFunc("/slack/sendgrid", SendSendgridSlackMessage(a)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
 
-func SendSlackMessage(a *App) func(w http.ResponseWriter, r *http.Request) {
+func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		const slackMsgUsername = "Sendgrid"
 
 		if a.Config.AuthToken != "" && r.Header.Get("Authorization") != a.Config.AuthToken {
 			log.Fatal(errors.New("Authorization token not match"))
@@ -92,7 +94,7 @@ func SendSlackMessage(a *App) func(w http.ResponseWriter, r *http.Request) {
 
 		escape := false
 		//channelID, timestamp, err := api.PostMessage(groupID, slack.MsgOptionText(bodyString, escape), slack.MsgOptionAttachments(attachment))
-		channelID, timestamp, err := a.Api.PostMessage(groupID, slack.MsgOptionText(bodyString, escape))
+		channelID, timestamp, err := a.Api.PostMessage(groupID, slack.MsgOptionUsername(slackMsgUsername), slack.MsgOptionText(bodyString, escape))
 		if err != nil {
 			log.Fatal(err)
 			w.WriteHeader(500)

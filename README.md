@@ -13,6 +13,8 @@ make run
 # Test
 ```
 make test
+make run
+make message
 ```
 
 # Run with Docker

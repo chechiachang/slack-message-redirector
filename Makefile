@@ -21,7 +21,7 @@ test: install
 	go test ./...
 
 message:
-	curl -X POST localhost:8000/slack -d "This is a testing body message"
+	curl -X POST localhost:8000/slack/sendgrid -d "This is a testing body message"
 
 message-remote:
 	curl -X POST $$(kubectl get svc --selector='app=slack-message-redirector' -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')/slack -d "This is a testing body message"
