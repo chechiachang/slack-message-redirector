@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -52,6 +53,13 @@ func (a *App) Run() {
 
 func SendSlackMessage(a *App) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+
+		if a.Config.AuthToken != "" && r.Header.Get("Authorization") != a.Config.AuthToken {
+			log.Fatal(errors.New("Authorization token not match"))
+			w.WriteHeader(403)
+			return
+		}
+
 		groupID := a.Config.DefaultSlackChannelID // channel: sendgrid
 		// TODO Get channel(group) information
 		//group, err := api.GetGroupInfo("group")
