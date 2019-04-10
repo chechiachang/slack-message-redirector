@@ -54,7 +54,10 @@ func (a *App) Run() {
 func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		const slackMsgUsername = "Sendgrid"
+		const (
+			msgUsername  = "Sendgrid"
+			msgIconEmoji = ":sendgrid:"
+		)
 
 		if a.Config.AuthToken != "" && r.Header.Get("Authorization") != a.Config.AuthToken {
 			log.Fatal(errors.New("Authorization token not match"))
@@ -94,7 +97,7 @@ func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Reques
 
 		escape := false
 		//channelID, timestamp, err := api.PostMessage(groupID, slack.MsgOptionText(bodyString, escape), slack.MsgOptionAttachments(attachment))
-		channelID, timestamp, err := a.Api.PostMessage(groupID, slack.MsgOptionUsername(slackMsgUsername), slack.MsgOptionText(bodyString, escape))
+		channelID, timestamp, err := a.Api.PostMessage(groupID, slack.MsgOptionUsername(msgUsername), slack.MsgOptionIconEmoji(msgIconEmoji), slack.MsgOptionText(bodyString, escape))
 		if err != nil {
 			log.Fatal(err)
 			w.WriteHeader(500)
