@@ -24,7 +24,7 @@ message:
 	curl -X POST localhost:8000/slack/sendgrid -d "This is a testing body message"
 
 message-remote:
-	curl -X POST $$(kubectl get svc --selector='app=slack-message-redirector' -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')/slack -d "This is a testing body message"
+	curl -X POST $$(kubectl get svc --selector='app=slack-message-redirector' -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')/slack/sendgrid -d "This is a testing body message"
 
 DOCKER_IMAGE=chechiachang/slack-message-redirector
 GIT_COMMIT_SHA = $(shell git rev-parse --short HEAD)
