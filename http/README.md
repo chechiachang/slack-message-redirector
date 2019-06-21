@@ -37,15 +37,14 @@ Run on Kubernetes
 # Deploy
 
 Set credentials
+Sendgrid not support AUTH TOKEN
 ```
-export AUTH_TOKEN=
 export SLACK_URL=
 export SLACK_CHANNEL=
 export SLACK_USERNAME=
 export SLACK_ICON_EMOJI=
 
 kubectl create secret generic slack-message-redirector-credentials \
---from-literal=AUTH_TOKEN=${AUTH_TOKEN} \
 --from-literal=SLACK_URL=${SLACK_URL} \
 --from-literal=SLACK_CHANNEL=${SLACK_CHANNEL} \
 --from-literal=SLACK_USERNAME=${SLACK_USERNAME} \

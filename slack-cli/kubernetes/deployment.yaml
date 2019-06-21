@@ -14,12 +14,6 @@ spec:
         image: chechiachang/slack-message-redirector:e03b943
         imagePullPolicy: IfNotPresent
         env:
-        - name: &auth-token AUTH_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: *slack-credentials
-              key: *auth-token
-
         - name: &slack-token SLACK_TOKEN
           valueFrom:
             secretKeyRef:
@@ -31,5 +25,12 @@ spec:
             secretKeyRef:
               name: *slack-credentials
               key: *slack-chennel-id
+
+        # Sendgrid not support AUTH_TOKEN
+        #- name: &auth-token AUTH_TOKEN
+        #  valueFrom:
+        #    secretKeyRef:
+        #      name: *slack-credentials
+        #      key: *auth-token
         ports:
         - containerPort: 8000

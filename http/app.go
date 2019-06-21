@@ -1,14 +1,12 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"net/url"
-	"strconv"
-	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -97,11 +95,25 @@ func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Reques
 		//	*/
 		//}
 
-		data := url.Values{}
-		data.Set("payload", Payload(a.Config.SlackChannel, a.Config.SlackUsername, bodyString, a.Config.SlackIconEmoji))
-		req, err := http.NewRequest("POST", a.Config.SlackUrl, strings.NewReader(data.Encode()))
-		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
-		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+		payload, err := json.Marshal(Payload{
+			Channel:   a.Config.SlackChannel,
+			Username:  a.Config.SlackUsername,
+			Text:      bodyString,
+			IconEmoji: a.Config.SlackIconEmoji,
+		})
+		if err != nil {
+			log.Fatal(err)
+			w.WriteHeader(500)
+			return
+		}
+
+		req, err := http.NewRequest("POST", a.Config.SlackUrl, bytes.NewBuffer(payload))
+		if err != nil {
+			log.Fatal(err)
+			w.WriteHeader(500)
+			return
+		}
+		req.Header.Add("Content-Type", "application/json")
 
 		resp, err := a.Client.Do(req)
 		if err != nil {
@@ -118,6 +130,9 @@ func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Reques
 	}
 }
 
-func Payload(channel, username, text, iconEmoji string) string {
-	return fmt.Sprintf(payloadTemplate, channel, username, text, iconEmoji)
+type Payload struct {
+	Channel   string `json:"channel"`
+	Username  string `json:"username"`
+	Text      string `json:"text"`
+	IconEmoji string `json:"icon_emoji"`
 }
