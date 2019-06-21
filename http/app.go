@@ -98,7 +98,7 @@ func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Reques
 		//}
 
 		data := url.Values{}
-		data.Set("payload", Payload(msgChannel, msgUsername, bodyString, msgIconEmoji))
+		data.Set("payload", Payload(a.Config.SlackChannel, a.Config.SlackUsername, bodyString, a.Config.SlackIconEmoji))
 		req, err := http.NewRequest("POST", a.Config.SlackUrl, strings.NewReader(data.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		req.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))

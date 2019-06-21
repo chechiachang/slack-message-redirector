@@ -14,18 +14,23 @@ spec:
         image: chechiachang/slack-message-redirector:e03b943
         imagePullPolicy: IfNotPresent
         env:
-
-        - name: &slack-chennel SLACK_CHANNEL
+        - name: &auth-token AUTH_TOKEN
           valueFrom:
             secretKeyRef:
               name: *slack-credentials
-              key: *slack-chennel
+              key: *auth-token
 
         - name: &slack-url SLACK_URL
           valueFrom:
             secretKeyRef:
               name: *slack-credentials
               key: *slack-url
+
+        - name: &slack-chennel SLACK_CHANNEL
+          valueFrom:
+            secretKeyRef:
+              name: *slack-credentials
+              key: *slack-chennel
 
         - name: &slack-username SLACK_USERNAME
           valueFrom:
