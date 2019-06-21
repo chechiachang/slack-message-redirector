@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: *app-name
-        image: chechiachang/slack-message-redirector:187c98a
+        image: chechiachang/slack-message-redirector:31f44e7
         imagePullPolicy: IfNotPresent
         env:
         - name: &slack-url SLACK_URL
