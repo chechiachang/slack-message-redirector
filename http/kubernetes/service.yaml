@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: &app-name slack-message-redirector
+  labels:
+    app: *app-name
+    component: api-server
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: *app-name
+    component: api-server
