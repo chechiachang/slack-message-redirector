@@ -12,10 +12,10 @@ install:
 	go get ./...
 
 build: install
-	go build .
+	go build -o slack-message-redirector .
 
 run: build
-	./slack-message-redirector
+	./slack-cli
 
 test: install
 	go test ./...

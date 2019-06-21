@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: &app-name slack-message-redirector
+spec:
+  template:
+    metadata:
+      labels:
+        app: *app-name
+        component: api-server
+    spec:
+      containers:
+      - name: *app-name
+        image: chechiachang/slack-message-redirector:dbb28dc
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: &slack-token SLACK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: &slack-credentials slack-message-redirector-credentials
+              key: *slack-token
+        - name: &slack-chennel-id SLACK_CHANNEL_ID
+          valueFrom:
+            secretKeyRef:
+              name: *slack-credentials
+              key: *slack-chennel-id
+        ports:
+        - containerPort: 8000
