@@ -15,7 +15,7 @@ build: install
 	go build -o slack-message-redirector .
 
 run: build
-	./slack-cli
+	./slack-message-redirector
 
 test: install
 	go test ./...
