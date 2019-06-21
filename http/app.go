@@ -112,7 +112,7 @@ func SendSendgridSlackMessage(a *App) func(w http.ResponseWriter, r *http.Reques
 
 		defer resp.Body.Close()
 		respBody, err := ioutil.ReadAll(resp.Body)
-		log.Printf("Message successfully sent. Response: %s", resp.Status, string(respBody))
+		log.Printf("Message successfully sent. Status: %s Response: %s", resp.Status, string(respBody))
 		w.WriteHeader(200)
 		return
 	}
